@@ -1,0 +1,163 @@
+[gd_scene load_steps=17 format=3 uid="uid://f6mo3n2lwddo"]
+
+[ext_resource type="Texture2D" uid="uid://v34huejui8ru" path="res://sprites/placeholder.png" id="1_030sy"]
+[ext_resource type="Script" path="res://scripts/PlayerController.gd" id="1_gi81y"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_ob4c2"]
+radius = 0.25
+height = 1.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j1cth"]
+atlas = ExtResource("1_030sy")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6jevb"]
+atlas = ExtResource("1_030sy")
+region = Rect2(224, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_exnf6"]
+atlas = ExtResource("1_030sy")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wmxp6"]
+atlas = ExtResource("1_030sy")
+region = Rect2(192, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8ltqu"]
+atlas = ExtResource("1_030sy")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_0nfdy"]
+atlas = ExtResource("1_030sy")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ssocc"]
+atlas = ExtResource("1_030sy")
+region = Rect2(160, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7nhtv"]
+atlas = ExtResource("1_030sy")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_7df3a"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j1cth")
+}],
+"loop": true,
+"name": &"IdleDown",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6jevb")
+}],
+"loop": true,
+"name": &"IdleDownLeft",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_exnf6")
+}],
+"loop": true,
+"name": &"IdleDownRight",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wmxp6")
+}],
+"loop": true,
+"name": &"IdleLeft",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8ltqu")
+}],
+"loop": true,
+"name": &"IdleRight",
+"speed": 1.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_0nfdy")
+}],
+"loop": true,
+"name": &"IdleUp",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ssocc")
+}],
+"loop": true,
+"name": &"IdleUpLeft",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7nhtv")
+}],
+"loop": true,
+"name": &"IdleUpRight",
+"speed": 5.0
+}]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hwqsf"]
+transparency = 1
+albedo_color = Color(0, 1, 1, 0.384314)
+
+[sub_resource type="BoxMesh" id="BoxMesh_mh0g7"]
+material = SubResource("StandardMaterial3D_hwqsf")
+size = Vector3(0.3, 0.3, 0.3)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ecd8v"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_x2lgd"]
+size = Vector3(1, 0.1, 1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="MC" type="CharacterBody3D" parent="." node_paths=PackedStringArray("PlayerRB", "interactionSquare", "Cam")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.12062, 0)
+script = ExtResource("1_gi81y")
+moveSpeed = 1.0
+camSpeed = 1.0
+RunMultiplier = 1.4
+PlayerRB = NodePath(".")
+interactionSquare = NodePath("InteractionSquare")
+Cam = NodePath("../Camera3D")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MC"]
+shape = SubResource("CapsuleShape3D_ob4c2")
+
+[node name="AnimatedSprite3D" type="AnimatedSprite3D" parent="MC"]
+pixel_size = 0.03
+texture_filter = 0
+sprite_frames = SubResource("SpriteFrames_7df3a")
+animation = &"IdleDownRight"
+
+[node name="InteractionSquare" type="MeshInstance3D" parent="MC"]
+visible = false
+mesh = SubResource("BoxMesh_mh0g7")
+
+[node name="Node3D" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Node3D"]
+transform = Transform3D(8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0)
+mesh = SubResource("PlaneMesh_ecd8v")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Node3D/MeshInstance3D"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Node3D/MeshInstance3D/StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+shape = SubResource("BoxShape3D_x2lgd")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.49311, 2.70989)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.527549, 0.849525, 0, -0.849525, 0.527549, 0, 3.06552, 0)
